@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090a10"><title>OpenBeat Next v5</title>
+<link rel="manifest" href="./manifest.json"><link rel="stylesheet" href="./css/style.css"></head>
+<body>
+<aside id="sidebar"><a class="logo" href="#"><i>♫</i><b>OPEN<span>BEAT</span></b><small>v5</small></a>
+<nav><button class="nav active" data-view="home">⌂ <span>Home</span></button><button class="nav" data-view="search">⌕ <span>Search</span></button><button class="nav" data-view="library">♡ <span>Library</span></button><button class="nav" data-view="recent">◷ <span>Recent</span></button></nav>
+<div class="side-label">EXPLORE</div><div id="sideGenres"></div>
+<div class="premium"><b>OpenBeat v5</b><p>Smart music discovery. Install it like an app.</p><button id="installBtn">Install App</button></div></aside>
+
+<div class="mobile-top"><button id="menuBtn">☰</button><b>OPEN<span>BEAT</span></b><button id="mobileSearch">⌕</button></div>
+
+<main><header><form id="searchForm"><span>⌕</span><input id="searchInput" placeholder="Search songs, artists, albums..." autocomplete="off"><button>Search</button></form><button id="themeBtn">◐</button></header>
+
+<section id="homeView">
+<div class="hero"><div><small>OPENBEAT NEXT v5</small><h1>Your music.<br><span>Your moment.</span></h1><p>Search, queue, like and play official music videos in one premium web app.</p><button id="heroPlay">▶ Start Listening</button></div><div class="hero-art"><div class="orb a"></div><div class="orb b"></div><strong>♫</strong><em>FEEL THE<br>SOUND</em></div></div>
+
+<section><div class="section-head"><h2>Made for you</h2><button class="see" data-query="popular music">Refresh</button></div><div id="featuredGrid" class="cards"></div></section>
+<section><div class="section-head"><h2>Popular playlists</h2><button>View all</button></div><div id="playlistGrid" class="playlists"></div></section>
+<section><div class="section-head"><h2 id="trendingTitle">Trending now</h2><button class="see" data-query="trending music">Refresh</button></div><div id="trendingGrid" class="cards"></div></section>
+<section><div class="section-head"><h2>Top artists</h2><button>View all</button></div><div id="artistGrid" class="artists"></div></section>
+</section>
+
+<section id="searchView" class="view hidden"><div class="page-title"><div><h1 id="searchTitle">Search</h1><p id="searchStatus">Find your next song.</p></div><button id="clearHistory">Clear history</button></div><div id="suggestions"></div><div id="searchGrid" class="cards"></div></section>
+<section id="libraryView" class="view hidden"><div class="page-title"><div><h1>Liked songs</h1><p>Your saved music.</p></div><button id="newPlaylist">+ Playlist</button></div><div id="libraryGrid" class="cards"></div></section>
+<section id="recentView" class="view hidden"><div class="page-title"><div><h1>Recently played</h1><p>Continue where you left off.</p></div></div><div id="recentGrid" class="cards"></div></section>
+</main>
+
+<aside id="rightPanel"><div class="panel-title"><b>NOW PLAYING</b><button id="closePanel">×</button></div>
+<div class="now-cover"><img id="bigThumb" alt=""><div class="disc">♫</div></div>
+<div class="now-meta"><div><h3 id="nowTitle">Choose a song</h3><p id="nowArtist">OpenBeat Next</p></div><button id="likeBtn">♡</button></div>
+<div class="seek"><span id="timeNow">0:00</span><input id="seekRange" type="range" min="0" max="1000" value="0"><span id="timeEnd">0:00</span></div>
+<div class="big-controls"><button id="shuffleBtn">⇄</button><button id="prevBtn">◀◀</button><button id="playBtn">▶</button><button id="nextBtn">▶▶</button><button id="repeatBtn">↻</button></div>
+<div class="queue-head"><b>UP NEXT (<span id="queueCount">0</span>)</b><button id="clearQueue">Clear</button></div><div id="queueList"></div>
+</aside>
+
+<footer><div class="mini"><img id="miniThumb" alt=""><div><b id="miniTitle">Choose a song</b><span id="miniArtist">OpenBeat Next</span></div><button id="miniLike">♡</button></div>
+<div class="bottom-controls"><button id="bottomShuffle">⇄</button><button id="bottomPrev">◀◀</button><button id="bottomPlay">▶</button><button id="bottomNext">▶▶</button><button id="bottomRepeat">↻</button></div>
+<div class="bottom-tools"><button id="panelBtn">☷</button><button id="videoBtn">▣</button><button id="muteBtn">🔊</button><input id="volume" type="range" min="0" max="100" value="80"></div>
+</footer>
+
+<div id="videoModal" class="modal hidden"><div class="video-box"><button id="closeVideo">×</button><div id="youtubePlayer"></div><p>Tip: Full-screen/background behavior is controlled by the browser and YouTube.</p></div></div>
+<div id="toast"></div><script src="https://www.youtube.com/iframe_api"></script><script src="./js/app.js"></script></body></html>
