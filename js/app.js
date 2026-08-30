@@ -29,9 +29,34 @@ let timer = null;
 let repeat = false;
 let deferredInstall = null;
 
-let fav = JSON.parse(localStorage.getItem('ob5fav') || '[]');
-let recent = JSON.parse(localStorage.getItem('ob5recent') || '[]');
-let history = JSON.parse(localStorage.getItem('ob5history') || '[]');
+function readStorageArray(key) {
+  try {
+    const value = localStorage.getItem(key);
+
+    if (!value) {
+      return [];
+    }
+
+    const parsed = JSON.parse(value);
+
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn('Storage parse error for', key, error);
+    return [];
+  }
+}
+
+function writeStorageArray(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.warn('Storage write error for', key, error);
+  }
+}
+
+let fav = readStorageArray('ob5fav');
+let recent = readStorageArray('ob5recent');
+let history = readStorageArray('ob5history');
 
 
 /* =========================================================
@@ -79,9 +104,9 @@ function toast(message) {
 
 
 function save() {
-  localStorage.setItem('ob5fav', JSON.stringify(fav));
-  localStorage.setItem('ob5recent', JSON.stringify(recent));
-  localStorage.setItem('ob5history', JSON.stringify(history));
+  writeStorageArray('ob5fav', fav);
+  writeStorageArray('ob5recent', recent);
+  writeStorageArray('ob5history', history);
 }
 
 
@@ -89,33 +114,97 @@ function save() {
    API
 ========================================================= */
 
+function fallbackSongs(query) {
+  const base = [
+    {
+      id: 'fallback-1',
+      title: 'Sunset Drive',
+      channel: 'Neon Avenue',
+      thumbnail: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'fallback-2',
+      title: 'Midnight Stories',
+      channel: 'Velvet Echo',
+      thumbnail: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'fallback-3',
+      title: 'Golden Hour',
+      channel: 'Horizon Beats',
+      thumbnail: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'fallback-4',
+      title: 'City Lights',
+      channel: 'Night Shift',
+      thumbnail: 'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      id: 'fallback-5',
+      title: 'Summer Vibes',
+      channel: 'Ocean Flow',
+      thumbnail: 'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=800&q=80'
+    }
+  ];
+
+  const safeQuery = String(query || 'music').trim();
+
+  if (!safeQuery || safeQuery === 'popular music') {
+    return base;
+  }
+
+  return base.map((song, index) => ({
+    ...song,
+    id: `${song.id}-${index}`,
+    title: `${safeQuery} ${index + 1}`,
+    channel: song.channel
+  }));
+}
+
 async function api(query) {
 
-  const response = await fetch(
-    '/api/search?q=' + encodeURIComponent(query),
-    {
+  const requestUrl =
+    location.protocol === 'file:'
+      ? `https://divya-ebon-seven.vercel.app/api/search?q=${encodeURIComponent(query)}`
+      : `/api/search?q=${encodeURIComponent(query)}`;
+
+  try {
+    const response = await fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Accept': 'application/json'
       }
+    });
+
+    let data;
+
+    try {
+      data = await response.json();
+    } catch {
+      if (location.protocol === 'file:') {
+        return { items: fallbackSongs(query), cached: true };
+      }
+      throw new Error('Invalid API response');
     }
-  );
 
-  let data;
+    if (!response.ok) {
+      if (location.protocol === 'file:') {
+        return { items: fallbackSongs(query), cached: true };
+      }
+      throw new Error(
+        data.error || 'YouTube API request failed'
+      );
+    }
 
-  try {
-    data = await response.json();
-  } catch {
-    throw new Error('Invalid API response');
+    return data;
+  } catch (error) {
+    if (location.protocol === 'file:' || !navigator.onLine) {
+      return { items: fallbackSongs(query), cached: true };
+    }
+
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(
-      data.error || 'YouTube API request failed'
-    );
-  }
-
-  return data;
 }
 
 
