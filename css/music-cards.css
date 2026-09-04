@@ -1,6 +1,6 @@
 #videoModal.hidden {
   display: flex !important;
-  visibility: hidden;
+  visibility: visible;
   opacity: 0;
   pointer-events: none;
 }
