@@ -1,0 +1,31 @@
+#sidebarBackdrop {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  body.side-open {
+    overflow: hidden;
+  }
+
+  #sidebarBackdrop {
+    position: fixed;
+    inset: 0;
+    display: block;
+    background: rgba(0, 0, 0, 0.58);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 20;
+  }
+
+  body.side-open #sidebarBackdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #sidebar {
+    z-index: 30;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}

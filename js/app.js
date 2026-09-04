@@ -1007,7 +1007,11 @@ function like() {
    VIEWS
 ========================================================= */
 
-function view(viewName) {
+function view(viewName, closeSidebar = false) {
+
+  if (closeSidebar) {
+    closeMobileSidebar();
+  }
 
   [
     'home',
@@ -1385,7 +1389,8 @@ $$('.nav').forEach(element => {
   element.onclick = () => {
 
     view(
-      element.dataset.view
+      element.dataset.view,
+      true
     );
   };
 });
@@ -1806,15 +1811,44 @@ if (muteButton) {
 const menuButton =
   $('#menuBtn');
 
+const sidebarBackdrop =
+  $('#sidebarBackdrop');
+
+function closeMobileSidebar() {
+
+  document.body.classList.remove('side-open');
+
+  if (menuButton) {
+    menuButton.setAttribute('aria-expanded', 'false');
+    menuButton.setAttribute('aria-label', 'Open navigation');
+  }
+}
+
 if (menuButton) {
 
   menuButton.onclick = () => {
 
-    document.body.classList.toggle(
-      'side-open'
-    );
+    const isOpen = document.body.classList.toggle('side-open');
+    menuButton.setAttribute('aria-expanded', String(isOpen));
+    menuButton.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
   };
 }
+
+if (sidebarBackdrop) {
+  sidebarBackdrop.onclick = closeMobileSidebar;
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    closeMobileSidebar();
+  }
+});
+
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 800) {
+    closeMobileSidebar();
+  }
+});
 
 
 /* =========================================================
@@ -1828,7 +1862,7 @@ if (mobileSearch) {
 
   mobileSearch.onclick = () => {
 
-    view('search');
+    view('search', true);
 
     $('#searchInput')?.focus();
   };
