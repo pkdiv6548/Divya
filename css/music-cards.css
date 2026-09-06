@@ -1110,6 +1110,35 @@ body.light-theme #themeBtn {
   border-color: #d1d8e4;
 }
 
+body.light-theme .mobile-top {
+  background: rgba(255, 255, 255, .96);
+  border-bottom-color: #d7dde8;
+  color: #17202d;
+  box-shadow: 0 8px 22px rgba(23, 32, 45, .08);
+}
+
+body.light-theme .mobile-top b {
+  color: #17202d;
+  letter-spacing: .12em;
+}
+
+body.light-theme .mobile-top b span {
+  color: #c51f55;
+}
+
+body.light-theme .mobile-top button {
+  border-color: #d1d8e4;
+  background: #f4f6fa;
+  color: #17202d;
+}
+
+body.light-theme .mobile-top button:hover,
+body.light-theme .mobile-top button:focus-visible {
+  border-color: #f52f6b;
+  background: #fff0f4;
+  color: #c51f55;
+}
+
 .theme-icon {
   display: block;
   width: 19px;
