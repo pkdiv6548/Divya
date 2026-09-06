@@ -928,3 +928,114 @@ body.light-theme .song.is-current,
 body.light-theme .song.playing {
   background: #fff3f7;
 }
+
+/* Light theme contrast and icon treatment */
+body.light-theme {
+  --bg: #f4f6fa;
+  --panel: #ffffff;
+  --card: #ffffff;
+  --line: #d7dde8;
+  --text: #17202d;
+  --muted: #5d6878;
+  color: var(--text);
+  background: #f4f6fa;
+}
+
+body.light-theme #sidebar {
+  background: #ffffff;
+  border-right-color: #dfe4ec;
+}
+
+body.light-theme .logo,
+body.light-theme .logo b,
+body.light-theme .nav,
+body.light-theme .genre,
+body.light-theme .side-label,
+body.light-theme .logo small {
+  color: var(--text);
+}
+
+body.light-theme .side-label,
+body.light-theme .logo small {
+  color: #687486;
+}
+
+body.light-theme .nav.active,
+body.light-theme .nav:hover,
+body.light-theme .genre:hover {
+  background: #fff0f4;
+  color: #c51f55;
+}
+
+body.light-theme main,
+body.light-theme .section-head h2,
+body.light-theme .page-title h1,
+body.light-theme .song b,
+body.light-theme .artist b,
+body.light-theme .playlist,
+body.light-theme .now-meta h3,
+body.light-theme .queue-head,
+body.light-theme .queue-item b,
+body.light-theme footer .mini b {
+  color: var(--text);
+}
+
+body.light-theme header form {
+  background: #ffffff;
+  border-color: #d7dde8;
+}
+
+body.light-theme header input,
+body.light-theme header input::placeholder {
+  color: #526073;
+}
+
+body.light-theme .hero {
+  background: linear-gradient(115deg, #ffffff, #fff0f5);
+  border-color: #d7dde8;
+}
+
+body.light-theme .hero p,
+body.light-theme .page-title p,
+body.light-theme .song span,
+body.light-theme .artist span,
+body.light-theme footer .mini span,
+body.light-theme .queue-item span {
+  color: #5d6878;
+}
+
+body.light-theme #rightPanel,
+body.light-theme footer {
+  background: #ffffff;
+  border-color: #d7dde8;
+}
+
+body.light-theme .panel-title,
+body.light-theme .queue-item {
+  border-color: #e3e7ee;
+}
+
+body.light-theme .bottom-controls button,
+body.light-theme .bottom-tools button,
+body.light-theme .big-controls button,
+body.light-theme .mini button,
+body.light-theme #themeBtn {
+  color: var(--text);
+}
+
+body.light-theme #themeBtn {
+  background: #ffffff;
+  border-color: #d1d8e4;
+}
+
+.theme-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  margin: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
