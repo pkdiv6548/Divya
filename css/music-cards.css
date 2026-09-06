@@ -1319,6 +1319,7 @@ footer .mini.playing img {
     overscroll-behavior: contain;
     scroll-behavior: smooth;
     scrollbar-width: none;
+    height: 90vh;
   }
 
   #sidebar::-webkit-scrollbar {
