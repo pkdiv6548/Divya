@@ -967,8 +967,15 @@ footer .mini img {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .playlists { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .artists { grid-template-columns: repeat(4, minmax(78px, 1fr)); gap: 10px; margin-bottom: 58px; }
-  footer { height: 142px; grid-template-columns: 1fr; gap: 2px; padding: 8px 14px; }
+  footer { height: 142px; grid-template-columns: 1fr; gap: 4px; padding: 8px 12px 10px; }
+  footer .mini { width: 100%; min-width: 0; min-height: 56px; padding: 4px 2px; }
+  footer .mini > div { flex: 1; min-width: 0; }
+  footer .mini b { font-size: 12px; }
+  footer .mini span { font-size: 10px; }
+  footer .mini button { width: 40px; height: 40px; flex: 0 0 40px; padding: 0; }
   .bottom-controls { order: 2; }
+  .bottom-controls button { width: 34px; height: 34px; margin: 0 3px; }
+  .bottom-controls #bottomPlay { width: 42px; height: 42px; }
   .bottom-tools { display: none; }
   footer .mini img { width: 48px; height: 48px; }
 }
