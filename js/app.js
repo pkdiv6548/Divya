@@ -587,6 +587,7 @@ function setImageSafe(imgElement, url, expectedId) {
   if (expectedId && (!current || current.id !== expectedId)) return;
 
   if (!url) {
+    imgElement.classList.add('placeholder');
     imgElement.src = PLACEHOLDER_SVG;
     return;
   }
@@ -594,11 +595,13 @@ function setImageSafe(imgElement, url, expectedId) {
   let applied = false;
 
   const onLoad = () => {
+    imgElement.classList.remove('placeholder');
     imgElement.classList.add('loaded');
     cleanup();
   };
 
   const onError = () => {
+    imgElement.classList.add('placeholder');
     imgElement.src = PLACEHOLDER_SVG;
     cleanup();
   };
@@ -611,6 +614,7 @@ function setImageSafe(imgElement, url, expectedId) {
 
   // Apply src then attach handlers
   imgElement.src = url;
+  imgElement.classList.remove('placeholder');
   imgElement.classList.remove('loaded');
   imgElement.addEventListener('load', onLoad);
   imgElement.addEventListener('error', onError);
@@ -622,6 +626,15 @@ function setImageSafe(imgElement, url, expectedId) {
       cleanup();
     }
   }, 6500);
+}
+
+function initializePlayerPlaceholders() {
+  ['bigThumb', 'miniThumb'].forEach(id => {
+    const image = $('#' + id);
+    if (!image) return;
+    image.classList.add('placeholder');
+    image.src = PLACEHOLDER_SVG;
+  });
 }
 
 function markPlayingForSong(songId) {
@@ -2203,6 +2216,8 @@ if (
 renderPlaylists();
 
 renderQueue();
+
+initializePlayerPlaceholders();
 
 loadQuery(
   'popular music',

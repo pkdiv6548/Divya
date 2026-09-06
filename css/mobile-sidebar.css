@@ -94,6 +94,11 @@
     border-radius: 10px;
   }
 
+  #sidebar .premium {
+    position: static;
+    margin: 28px 0 0;
+  }
+
   body.side-open .mobile-top {
     pointer-events: none;
   }
