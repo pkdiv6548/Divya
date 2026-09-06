@@ -95,7 +95,9 @@
   }
 
   #sidebar .premium {
+    display: block !important;
     position: static;
+    width: auto;
     margin: 28px 0 0;
   }
 
