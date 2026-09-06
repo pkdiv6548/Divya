@@ -183,8 +183,11 @@ function fallbackSongs(query) {
 
 async function api(query) {
 
+  const isGitHubPages =
+    location.hostname.endsWith('github.io');
+
   const requestUrl =
-    location.protocol === 'file:'
+    location.protocol === 'file:' || isGitHubPages
       ? `https://divya-ebon-seven.vercel.app/api/search?q=${encodeURIComponent(query)}`
       : `/api/search?q=${encodeURIComponent(query)}`;
 
