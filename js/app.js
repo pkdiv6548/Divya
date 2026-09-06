@@ -29,6 +29,25 @@ let timer = null;
 let repeat = false;
 let deferredInstall = null;
 
+// Player state & helpers (added)
+let playerState = 'idle'; // idle, loading, metadata-loading, ready, playing, paused, ended, error
+let rafId = null;
+let isSeeking = false;
+let lastQueryId = 0; // used to ignore stale search responses
+
+const PLACEHOLDER_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`
+<svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 24 24' fill='none'>
+  <rect width='100%' height='100%' fill='%23171820' rx='8'/>
+  <g fill='%23777a86' opacity='0.9'>
+    <rect x='4' y='7' width='2' height='10' rx='1'/>
+    <rect x='8' y='5' width='2' height='12' rx='1'/>
+    <rect x='12' y='9' width='2' height='8' rx='1'/>
+    <rect x='16' y='6' width='2' height='11' rx='1'/>
+    <rect x='20' y='8' width='2' height='9' rx='1'/>
+  </g>
+</svg>
+`)}`;
+
 function readStorageArray(key) {
   try {
     const value = localStorage.getItem(key);
@@ -215,13 +234,17 @@ async function api(query) {
 function songCard(song, index) {
 
   return `
-    <article class="song" data-i="${index}">
+    <article class="song" data-i="${index}" data-id="${esc(song.id)}">
       <div class="cover">
         <img
           loading="lazy"
-          src="${esc(song.thumbnail)}"
+          src="${esc(song.thumbnail || PLACEHOLDER_SVG)}"
           alt="${esc(song.title)}"
         >
+
+        <div class="equalizer" aria-hidden="true">
+          <span></span><span></span><span></span><span></span>
+        </div>
 
         <button
           class="play"
@@ -472,6 +495,130 @@ function renderArtists(items) {
    PLAYER UI
 ========================================================= */
 
+function formatTime(s) {
+  if (!isFinite(s) || s === 0) return '0:00';
+  s = Math.floor(s);
+  const m = Math.floor(s / 60);
+  const sec = String(s % 60).padStart(2, '0');
+  return `${m}:${sec}`;
+}
+
+function setPlayerState(state) {
+  playerState = state;
+
+  // Toggle classes or UI indicators if necessary
+  const mini = document.querySelector('footer .mini');
+  if (mini) {
+    mini.classList.toggle('playing', state === 'playing');
+  }
+
+  // For right panel
+  const panel = document.querySelector('#rightPanel');
+  if (panel) {
+    panel.classList.toggle('playing', state === 'playing');
+  }
+
+  if (state !== 'playing') {
+    stopProgressLoop();
+  } else {
+    startProgressLoop();
+  }
+}
+
+function startProgressLoop() {
+  if (rafId) return;
+
+  const timeNow = $('#timeNow');
+  const timeEnd = $('#timeEnd');
+  const seekRange = $('#seekRange');
+
+  function loop() {
+    try {
+      if (yt && typeof yt.getCurrentTime === 'function') {
+        const currentTime = yt.getCurrentTime();
+        const duration = yt.getDuration();
+
+        if (!isSeeking) {
+          if (seekRange && isFinite(duration) && duration > 0) {
+            const pct = Math.max(0, Math.min(1, currentTime / duration));
+            seekRange.value = Math.round(pct * 1000);
+          }
+        }
+
+        if (timeNow) timeNow.textContent = formatTime(currentTime);
+        if (timeEnd) timeEnd.textContent = isFinite(duration) && duration > 0 ? formatTime(duration) : '0:00';
+      }
+    } catch (e) {
+      // silent
+    }
+
+    rafId = requestAnimationFrame(loop);
+  }
+
+  rafId = requestAnimationFrame(loop);
+}
+
+function stopProgressLoop() {
+  if (rafId) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+}
+
+function setImageSafe(imgElement, url, expectedId) {
+  if (!imgElement) return;
+
+  // Guard against stale updates: if expectedId provided, only apply when current matches
+  if (expectedId && (!current || current.id !== expectedId)) return;
+
+  if (!url) {
+    imgElement.src = PLACEHOLDER_SVG;
+    return;
+  }
+
+  let applied = false;
+
+  const onLoad = () => {
+    imgElement.classList.add('loaded');
+    cleanup();
+  };
+
+  const onError = () => {
+    imgElement.src = PLACEHOLDER_SVG;
+    cleanup();
+  };
+
+  function cleanup() {
+    applied = true;
+    imgElement.removeEventListener('load', onLoad);
+    imgElement.removeEventListener('error', onError);
+  }
+
+  // Apply src then attach handlers
+  imgElement.src = url;
+  imgElement.classList.remove('loaded');
+  imgElement.addEventListener('load', onLoad);
+  imgElement.addEventListener('error', onError);
+
+  // If image never fires, fallback after timeout
+  setTimeout(() => {
+    if (!applied && imgElement.src !== PLACEHOLDER_SVG) {
+      imgElement.src = PLACEHOLDER_SVG;
+      cleanup();
+    }
+  }, 6500);
+}
+
+function markPlayingForSong(songId) {
+  // Remove playing from any song
+  $$('.song.playing').forEach(el => el.classList.remove('playing'));
+
+  if (!songId) return;
+
+  const el = document.querySelector(`.song[data-id="${songId}"]`);
+  if (el) el.classList.add('playing');
+}
+
 function updatePlayerUI(song) {
 
   if (!song) return;
@@ -496,14 +643,12 @@ function updatePlayerUI(song) {
   });
 
 
-  ['bigThumb', 'miniThumb'].forEach(id => {
+  // Use safe image setter with guard against stale updates
+  const bigThumb = $('#bigThumb');
+  const miniThumb = $('#miniThumb');
 
-    const element = $('#' + id);
-
-    if (element) {
-      element.src = song.thumbnail;
-    }
-  });
+  setImageSafe(bigThumb, song.thumbnail, song.id);
+  setImageSafe(miniThumb, song.thumbnail, song.id);
 }
 
 
@@ -520,6 +665,7 @@ function updatePlayButtons(isPlaying) {
     if (element) {
       element.textContent =
         isPlaying ? 'Ⅱ' : '▶';
+      element.setAttribute('aria-pressed', String(isPlaying));
     }
   });
 }
@@ -566,7 +712,7 @@ function setupMediaSession(song) {
       'play',
       () => {
         if (yt) {
-          yt.playVideo();
+          try { yt.playVideo(); } catch {}
         }
       }
     );
@@ -575,7 +721,7 @@ function setupMediaSession(song) {
       'pause',
       () => {
         if (yt) {
-          yt.pauseVideo();
+          try { yt.pauseVideo(); } catch {}
         }
       }
     );
@@ -672,6 +818,7 @@ function createYouTubePlayer(videoId) {
           event.target.playVideo();
 
           updatePlayButtons(true);
+          setPlayerState('ready');
         },
 
 
@@ -683,6 +830,10 @@ function createYouTubePlayer(videoId) {
           ) {
 
             updatePlayButtons(true);
+            setPlayerState('playing');
+
+            // mark playing on card
+            if (current) markPlayingForSong(current.id);
 
             if (
               'mediaSession' in navigator
@@ -703,6 +854,7 @@ function createYouTubePlayer(videoId) {
           ) {
 
             updatePlayButtons(false);
+            setPlayerState('paused');
 
             if (
               'mediaSession' in navigator
@@ -723,6 +875,7 @@ function createYouTubePlayer(videoId) {
           ) {
 
             updatePlayButtons(false);
+            setPlayerState('ended');
 
             if (repeat) {
 
@@ -805,6 +958,9 @@ function play(song) {
   setupMediaSession(song);
   renderQueue();
 
+
+  // Mark selection immediately in UI
+  markPlayingForSong(song.id);
 
   if (ytReady) {
 
@@ -1142,8 +1298,12 @@ async function loadQuery(
 
   try {
 
+    const myQueryId = ++lastQueryId;
     const data =
       await api(query);
+
+    // Ignore stale responses
+    if (myQueryId !== lastQueryId) return;
 
 
     last =
@@ -1268,8 +1428,11 @@ async function doSearch(query) {
 
   try {
 
+    const myQueryId = ++lastQueryId;
     const data =
       await api(query);
+
+    if (myQueryId !== lastQueryId) return;
 
 
     last =
@@ -1802,6 +1965,41 @@ if (muteButton) {
     }
   };
 }
+
+
+/* =========================================================
+   SEEK / PROGRESS HANDLING (wire up handlers)
+========================================================= */
+
+const seekRange = $('#seekRange');
+if (seekRange) {
+  // range is 0..1000 as per markup
+  seekRange.addEventListener('pointerdown', () => { isSeeking = true; });
+  seekRange.addEventListener('pointerup', async () => { isSeeking = false; if (yt) {
+    try {
+      const duration = yt.getDuration();
+      const pct = Number(seekRange.value) / 1000;
+      const seconds = Math.max(0, Math.min(duration || 0, pct * (duration || 0)));
+      yt.seekTo(seconds, true);
+    } catch {}
+  }});
+
+  seekRange.addEventListener('change', async () => {
+    if (yt) {
+      try {
+        const duration = yt.getDuration();
+        const pct = Number(seekRange.value) / 1000;
+        const seconds = Math.max(0, Math.min(duration || 0, pct * (duration || 0)));
+        yt.seekTo(seconds, true);
+      } catch {}
+    }
+  });
+}
+
+
+/* =========================================================
+   VIDEO MODAL (end)
+========================================================= */
 
 
 /* =========================================================
