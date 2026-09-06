@@ -1311,3 +1311,36 @@ footer .mini.playing img {
     animation: none;
   }
 }
+
+/* Desktop sidebar scroll and dark theme control */
+@media (min-width: 801px) {
+  #sidebar {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  #sidebar::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+body:not(.light-theme) #themeBtn {
+  border: 1px solid rgba(255, 255, 255, .16);
+  background: linear-gradient(145deg, #20283a, #111722);
+  color: #f8fbff;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .1);
+}
+
+body:not(.light-theme) #themeBtn:hover,
+body:not(.light-theme) #themeBtn:focus-visible {
+  border-color: rgba(53, 215, 223, .72);
+  background: linear-gradient(145deg, #2b3850, #171d2c);
+  color: #7debf0;
+  box-shadow: 0 10px 28px rgba(53, 215, 223, .16), inset 0 1px 0 rgba(255, 255, 255, .14);
+  outline: none;
+  transform: translateY(-1px);
+}
