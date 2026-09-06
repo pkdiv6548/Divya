@@ -967,7 +967,7 @@ footer .mini img {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .playlists { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .artists { grid-template-columns: repeat(4, minmax(78px, 1fr)); gap: 10px; margin-bottom: 58px; }
-  footer { height: 142px; grid-template-columns: 1fr; gap: 4px; padding: 8px 12px 10px; }
+  footer { height: 142px; grid-template-columns: 1fr; grid-template-rows: 58px 42px; gap: 4px; padding: 8px 12px 10px; }
   footer .mini { width: 100%; min-width: 0; min-height: 56px; padding: 4px 2px; }
   footer .mini > div { flex: 1; min-width: 0; }
   footer .mini b { font-size: 12px; }
