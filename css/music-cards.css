@@ -170,3 +170,60 @@ footer .mini.playing{box-shadow:inset 0 0 0 9999px rgba(245,47,107,0.04)}
   .song { padding: 6px; }
   .song b { font-size: 12px; }
 }
+
+body.light-theme {
+  --bg: #f3f5f8;
+  --panel: #ffffff;
+  --card: #ffffff;
+  --line: #d9dee8;
+  --text: #17202d;
+  --muted: #657080;
+  background: radial-gradient(circle at 50% 0, #ffe3ec, transparent 30%), var(--bg);
+}
+
+body.light-theme #sidebar,
+body.light-theme #rightPanel,
+body.light-theme footer {
+  background: rgba(255, 255, 255, .94);
+  color: var(--text);
+}
+
+body.light-theme #sidebar,
+body.light-theme #rightPanel,
+body.light-theme footer,
+body.light-theme header form {
+  border-color: var(--line);
+}
+
+body.light-theme header form,
+body.light-theme .song,
+body.light-theme .premium,
+body.light-theme .queue-item,
+body.light-theme .history button {
+  background: #ffffff;
+  color: var(--text);
+}
+
+body.light-theme .nav,
+body.light-theme .genre,
+body.light-theme header input,
+body.light-theme .bottom-controls button,
+body.light-theme .bottom-tools button,
+body.light-theme .big-controls button {
+  color: var(--text);
+}
+
+body.light-theme .hero {
+  background: linear-gradient(105deg, #ffffff, #fff0f5);
+  border-color: var(--line);
+}
+
+body.light-theme .song:hover,
+body.light-theme .song.is-current,
+body.light-theme .song.playing {
+  background: #fff4f7;
+}
+
+body.light-theme .empty {
+  border-color: var(--line);
+}

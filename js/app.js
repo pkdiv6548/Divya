@@ -2086,13 +2086,26 @@ if (mobileSearch) {
 const themeButton =
   $('#themeBtn');
 
+function applyTheme(isLight) {
+  document.body.classList.toggle('light-theme', isLight);
+
+  if (themeButton) {
+    themeButton.textContent = isLight ? '☾' : '◐';
+    themeButton.setAttribute('aria-pressed', String(isLight));
+    themeButton.setAttribute('aria-label', isLight ? 'Switch to dark theme' : 'Switch to light theme');
+  }
+}
+
+const savedTheme = localStorage.getItem('ob5theme');
+applyTheme(savedTheme === 'light');
+
 if (themeButton) {
 
   themeButton.onclick = () => {
-
-    toast(
-      'Dark premium theme active'
-    );
+    const isLight = !document.body.classList.contains('light-theme');
+    applyTheme(isLight);
+    localStorage.setItem('ob5theme', isLight ? 'light' : 'dark');
+    toast(isLight ? 'Light theme active' : 'Dark theme active');
   };
 }
 
