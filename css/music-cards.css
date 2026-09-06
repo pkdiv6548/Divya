@@ -494,7 +494,10 @@ footer .mini b {
   }
 
   .mobile-top {
+    position: fixed;
+    inset: 0 0 auto;
     height: 58px;
+    z-index: 45;
     border-bottom: 1px solid var(--line);
     background: rgba(12, 13, 19, .9);
     backdrop-filter: blur(18px);

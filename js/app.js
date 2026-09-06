@@ -2024,6 +2024,9 @@ const menuButton =
 const sidebarBackdrop =
   $('#sidebarBackdrop');
 
+const sidebarClose =
+  $('#sidebarClose');
+
 function closeMobileSidebar() {
 
   document.body.classList.remove('side-open');
@@ -2046,6 +2049,10 @@ if (menuButton) {
 
 if (sidebarBackdrop) {
   sidebarBackdrop.onclick = closeMobileSidebar;
+}
+
+if (sidebarClose) {
+  sidebarClose.onclick = closeMobileSidebar;
 }
 
 document.addEventListener('keydown', event => {
