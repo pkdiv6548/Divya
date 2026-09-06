@@ -28,8 +28,8 @@
 
 <aside id="rightPanel"><div class="panel-title"><b>NOW PLAYING</b><button id="closePanel">×</button></div>
 <div class="now-cover"><img id="bigThumb" alt=""><div class="disc">♫</div></div>
-<div class="now-meta"><div><h3 id="nowTitle">Choose a song</h3><p id="nowArtist">OpenBeat Next</p></div><button id="likeBtn">♡</button></div>
-<div class="seek"><span id="timeNow">0:00</span><input id="seekRange" type="range" min="0" max="1000" value="0"><span id="timeEnd">0:00</span></div>
+<div class="now-meta"><div><h3 id="nowTitle">Choose a song</h3><p id="nowArtist">OpenBeat Next</p><small id="playbackStatus" aria-live="polite">Ready</small></div><button id="likeBtn" type="button" aria-label="Like song">♡</button></div>
+<div class="seek"><span id="timeNow">0:00</span><input id="seekRange" type="range" min="0" max="1000" value="0" aria-label="Seek through song"><span id="timeEnd">--:--</span></div>
 <div class="big-controls"><button id="shuffleBtn">⇄</button><button id="prevBtn">◀◀</button><button id="playBtn">▶</button><button id="nextBtn">▶▶</button><button id="repeatBtn">↻</button></div>
 <div class="queue-head"><b>UP NEXT (<span id="queueCount">0</span>)</b><button id="clearQueue">Clear</button></div><div id="queueList"></div>
 </aside>

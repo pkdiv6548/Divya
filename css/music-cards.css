@@ -54,3 +54,119 @@ footer .mini.playing{box-shadow:inset 0 0 0 9999px rgba(245,47,107,0.04)}
   footer .mini img{width:48px;height:48px}
   .song b{font-size:14px}
 }
+
+.song {
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(25, 26, 37, .92), rgba(15, 16, 24, .72));
+  transition: transform .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease;
+}
+
+.song:hover,
+.song.is-current {
+  border-color: rgba(245, 47, 107, .42);
+  background: #1b1c28;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .2);
+}
+
+.song.is-playing {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 1px rgba(245, 47, 107, .2), 0 14px 28px rgba(245, 47, 107, .12);
+}
+
+.song.playing {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 1px rgba(245, 47, 107, .2), 0 14px 28px rgba(245, 47, 107, .12);
+}
+
+.cover {
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+}
+
+.cover img {
+  background: linear-gradient(135deg, #202331, #11121b);
+}
+
+.song .play {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, .28);
+}
+
+.song .add {
+  width: 32px;
+  height: 32px;
+}
+
+.song.is-current .play,
+.song.is-playing .play,
+.song.playing .play {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.song b {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.song span:not(.equalizer) {
+  margin-top: 5px;
+}
+
+.equalizer {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: end;
+  gap: 3px;
+  width: 18px;
+  height: 18px;
+  padding: 3px;
+  border-radius: 5px;
+  background: rgba(9, 10, 16, .78);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.equalizer i {
+  display: block;
+  width: 3px;
+  height: 55%;
+  border-radius: 2px;
+  background: var(--pink);
+}
+
+.equalizer i:nth-child(2) { height: 90%; }
+.equalizer i:nth-child(3) { height: 68%; }
+
+.song.is-playing .equalizer {
+  opacity: 1;
+}
+
+.song.is-playing .equalizer i {
+  animation: equalizer-bounce .8s ease-in-out infinite alternate;
+}
+
+.song.is-playing .equalizer i:nth-child(2) { animation-delay: -.35s; }
+.song.is-playing .equalizer i:nth-child(3) { animation-delay: -.6s; }
+
+@keyframes equalizer-bounce {
+  from { transform: scaleY(.45); }
+  to { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .song,
+  .cover img,
+  .song button { transition: none; }
+  .song.is-playing .equalizer i { animation: none; }
+}
+
+@media (max-width: 800px) {
+  .song { padding: 6px; }
+  .song b { font-size: 12px; }
+}

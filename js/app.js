@@ -240,6 +240,7 @@ function songCard(song, index) {
           loading="lazy"
           src="${esc(song.thumbnail || PLACEHOLDER_SVG)}"
           alt="${esc(song.title)}"
+          onerror="this.onerror=null;this.src='${PLACEHOLDER_SVG}'"
         >
 
         <div class="equalizer" aria-hidden="true">
@@ -506,6 +507,8 @@ function formatTime(s) {
 function setPlayerState(state) {
   playerState = state;
 
+  markPlayingForSong(state === 'playing' ? current?.id : null);
+
   // Toggle classes or UI indicators if necessary
   const mini = document.querySelector('footer .mini');
   if (mini) {
@@ -516,6 +519,15 @@ function setPlayerState(state) {
   const panel = document.querySelector('#rightPanel');
   if (panel) {
     panel.classList.toggle('playing', state === 'playing');
+  }
+
+  const status = $('#playbackStatus');
+  if (status) {
+    status.textContent = state === 'playing' ? 'Playing'
+      : state === 'loading' || state === 'metadata-loading' ? 'Loading'
+        : state === 'ended' ? 'Ended'
+          : state === 'paused' ? 'Paused'
+            : state === 'error' ? 'Playback error' : 'Ready';
   }
 
   if (state !== 'playing') {
@@ -958,9 +970,6 @@ function play(song) {
   setupMediaSession(song);
   renderQueue();
 
-
-  // Mark selection immediately in UI
-  markPlayingForSong(song.id);
 
   if (ytReady) {
 
