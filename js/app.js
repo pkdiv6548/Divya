@@ -37,8 +37,8 @@ let lastQueryId = 0; // used to ignore stale search responses
 
 const PLACEHOLDER_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`
 <svg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 24 24' fill='none'>
-  <rect width='100%' height='100%' fill='%23171820' rx='8'/>
-  <g fill='%23777a86' opacity='0.9'>
+  <rect width='100%' height='100%' fill='#171820' rx='8'/>
+  <g fill='#777a86' opacity='0.9'>
     <rect x='4' y='7' width='2' height='10' rx='1'/>
     <rect x='8' y='5' width='2' height='12' rx='1'/>
     <rect x='12' y='9' width='2' height='8' rx='1'/>
