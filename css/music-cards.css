@@ -799,6 +799,49 @@ header form button,
   box-shadow: 0 14px 30px rgba(0, 0, 0, .16);
 }
 
+.artists {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(78px, 1fr));
+  gap: 14px;
+  min-height: 126px;
+  margin-bottom: 42px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 12px;
+}
+
+.artist {
+  min-width: 78px;
+  padding: 8px 5px 10px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .035);
+  color: var(--text);
+  text-align: center;
+}
+
+.artist img {
+  display: block;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  border: 2px solid rgba(245, 47, 107, .28);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.artist b {
+  display: block;
+  max-width: 100%;
+  margin-top: 8px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 #rightPanel {
   width: 350px;
   padding: 28px 22px;
@@ -888,6 +931,7 @@ footer .mini img {
   .hero-record { width: 140px; height: 140px; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .playlists { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .artists { grid-template-columns: repeat(4, minmax(78px, 1fr)); gap: 10px; margin-bottom: 58px; }
   footer { height: 142px; grid-template-columns: 1fr; gap: 2px; padding: 8px 14px; }
   .bottom-controls { order: 2; }
   .bottom-tools { display: none; }
